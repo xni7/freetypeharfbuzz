@@ -1,0 +1,29 @@
+
+LIBS_ARCHIVE_FILE = @STATIC_FILE@
+
+STATIC_LIBS_URL = "https://github.com/lionel-/freetypeharfbuzz/raw/master/src/target/$(LIBS_ARCHIVE_FILE)"
+
+# Extracted along HB_STATIC_LIB
+$(FT_STATIC_LIB):
+
+$(LIBS_ARCHIVE_FILE):
+	$(TOOLS_DIR)/download.sh $(STATIC_LIBS_URL) $(TARGET_DIR)/$(LIBS_ARCHIVE_FILE)
+
+$(HB_STATIC_LIB): $(LIBS_ARCHIVE_FILE)
+	cd $(TARGET_DIR) && \
+	$(TOOLS_DIR)/untar.sh $(LIBS_ARCHIVE_FILE)
+
+
+INCLUDE_URL = "https://github.com/lionel-/freetypeharfbuzz/raw/master/src/target/include.tar.gz"
+INCLUDE_FILE = $(TARGET_DIR)/include.tar.gz
+
+$(INCLUDE_FILE):
+	$(TOOLS_DIR)/download.sh $(INCLUDE_URL) $(INCLUDE_FILE)
+
+$(INCLUDE_DIR): $(HB_STATIC_LIB) $(INCLUDE_FILE)
+	cd $(TARGET_DIR) && $(TOOLS_DIR)/untar.sh include.tar.gz
+
+
+# Local Variables:
+# mode: makefile
+# End:
